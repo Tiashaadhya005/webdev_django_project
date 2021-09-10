@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Online bus booking Site</title>
+</head>
+<body>
+    <form action="/busreg" method="post" >
+    {%csrf_token %}
+    <div><h3>Enter your starting location:   <input type="text" name="StartingLocation" placeholder="Enter a location" required></h3></div>
+    <div><h3>Enter your ending location:     <input type="text" name="EndLocation" placeholder="Enter a location" required></h3></div>
+    <div><input type="submit" id="cf" name='busreg'></div>
+
+</form>
+</body>
+</html>
