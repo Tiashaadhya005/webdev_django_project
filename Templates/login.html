@@ -1,3 +1,8 @@
+<div>
+{% if msg %}
+{{msg}}
+{% endif %}
+</div>
 <form action="/check/login" method="post">
     {% csrf_token %}
     <h3>Enter your Name :{{form.your_name}}</h3>

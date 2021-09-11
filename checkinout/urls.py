@@ -2,8 +2,8 @@ from django.urls import path
 from .views import *
 
 urlpatterns = [
-    path('inbus',infun,name="inbus"),
-    path("outbus",outfun,name="outbus"),
+    path('inbus/<str:n>',infun,name="inbus"),
+    path("outbus/<str:n>",outfun,name="outbus"),
     path("register", registration, name="register"),
     path("login", login, name="login"),
 ]

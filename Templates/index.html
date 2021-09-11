@@ -65,7 +65,7 @@ body {
   <a href="#default" class="logo">CompanyLogo</a>
   <div class="header-right">
     {%if header_mssg%}
-      <h3>{{header_mssg}}</h3>
+      <h3>hi {{header_mssg}}</h3>
     {%else%}
     <a class="active" href="/check/register">Register</a>
     <a href="/check/login">Login</a>
@@ -78,15 +78,22 @@ body {
   <div><h3>Do you want to search buses? <a href="/busreg" >Click here to book seat</a></div>
     <div><h3>register yourself before checking or checkout<a href="/check/register" >here</a></h3></div>
     <div>
-        <!---<h3><input type="button" text="checkin" href="/check/inbus" ></h3> -->
-        <a href='/check/inbus'>
+      {%if header_mssg%}
+        <a href='/check/inbus/{{header_mssg}}'>
+      {%else%}
+        <a href='/check/inbus/NOTDONE'>
+      {% endif %}
         <button >
             Checkin
         </button>
     </a>
     </div>
     <div>
-        <a href='/check/outbus'>
+      {%if header_mssg%}
+        <a href='/check/outbus/{{header_mssg}}'>
+      {%else%}
+        <a href='/check/outbus/NOTDONE'>
+      {% endif %}
         <button >
             Checkout
         </button>
