@@ -25,4 +25,6 @@ class Serializermodel(serializers.ModelSerializer):
         except Exception as err:
             raise serializers.ValidationError("No such Location Found")
 
-    # -
+    # def create(self, validated_data):
+    #     return super(Serializermodel).save(validated_data)
+    # # -
