@@ -1,6 +1,7 @@
 from django.http.response import HttpResponse
 from django.shortcuts import render
 from rest_framework import viewsets
+from rest_framework.exceptions import server_error
 from rest_framework.serializers import Serializer
 from rest_framework.views import APIView
 from rest_framework.decorators import api_view
@@ -126,10 +127,9 @@ def bookseat(request):
         if serializer_data.is_valid():
             res=choice_of_user(serializer_data)
             if res!=None:
-                # global bus_with_seat
-                # print(bus_with_seat)
+                # print(Serializer.validated_data)
+                #Serializermodel.create(Serializermodel,validated_data=serializer_data)
                 return HttpResponse(f"Successfully booked seat in {res}")
-                #serializer_data.save()
                 return Response({'msg':"Ticket booked"})
             else:return HttpResponse(break_journey_mssg)
         return Response(serializer_data.errors)
@@ -190,8 +190,10 @@ def graphjourney(request):
                         if no_ticket_flag==1:continue
                         if no_ticket_flag==0:break
                     if no_ticket_flag==0:break
-                if no_ticket_flag==1:return HttpResponse("No ticket avilable for your journey")
-                else:return HttpResponse("Your ticket has been booked.")
+                if no_ticket_flag==1:
+                    return HttpResponse("No ticket avilable for your journey")
+                else:
+                    return HttpResponse("Your ticket has been booked.")
 
 
         else:return HttpResponse("not valid")
