@@ -5,7 +5,8 @@ from django.http import HttpResponseRedirect
 from django.contrib import messages
 from django.contrib.auth import authenticate
 from django.contrib.auth.decorators import login_required,permission_required
-from .forms import NameForm
+import pytest
+from forms import NameForm
 from utils import *
 
 
@@ -36,7 +37,7 @@ def registration(request):
                 {"username":p['your_name'],"useremail":p['your_email'],"user_mobile":p['your_mobile'],"user_password":p['your_password']}
                 )
             # after storing it will redirect to main page
-            return HttpResponseRedirect('/')
+            return render(request,"index.html",{'header_mssg':f"{p['your_name']}"})
         else:
             #if the form is not valid 
             return HttpResponse("not valid")
@@ -48,6 +49,7 @@ def login(request):
     if request.method == 'POST':
         form = NameForm(request.POST)
         p=form.data
+        print(p)
         #if the form data is valid it will call auth_enticate function that checks for the authentication
         #  i.e, the user exists or not
         if form.is_valid():
@@ -58,7 +60,7 @@ def login(request):
                 return render(request,"index.html",{'header_mssg':f"{p['your_name']}"})
 
             #for invalid credentials it will redirect to main page
-            return HttpResponseRedirect('/')
+            return render(request,"login.html",{"msg":"no user found!","form":form})
         else:
             #bellow code will execute if the form is not valid
             a=form.errors
@@ -72,15 +74,25 @@ def login(request):
 #@login_required(login_url="/check/login")
 #@permission_required(perm="infun",login_url='check/login')
 def infun(request,n):
+    print(n,request)
     #this function will execute after clicking "checkin "button
 
-    if n=="NOTDONE":
+    my_db=get_db()
+    my_collection=get_coll_for_user_acc()
+    particular_user=my_collection.find_one({"username":n})
+
+    if particular_user==None:
         #n is "NOTDONE" when the user is not logged in still tries to start checkin
         #in that case it will be redirected to login page with a message that the user has to loggedin first
         form=NameForm()
         return render(request,"login.html",{"msg":"FIRST you need to login before that operation","form":form})
 
-    else:
+    try:
+        #if checkin already started user can't checkin again before the previous checkout.
+        already_started=particular_user["checkin_time"]
+        return HttpResponse(f"you have started your checkin .now you have to <a href='/check/outbus/{n}'>checkout</a> before checking in again")
+        
+    except Exception as err:
         #when the user is logged in then tries to checkin then checkedin will start perfectly
         checkin= datetime.now()#to get the timedetails of checkin time
         #print(f"checkin time : {checkin}")
@@ -100,11 +112,15 @@ def infun(request,n):
 
 #this function is for "checkout" button
 def outfun(request,n):
-
     #n is "NOTDONE" when the user is not logged in still tries to start checkin
     #in that case it will be redirected to login page with a message that the user has to loggedin first
-    if n=="NOTDONE":
+    my_db=get_db()
+    my_collection=get_coll_for_user_acc()
+    particular_user=my_collection.find_one({"username":n})
+
+    if particular_user==None:
         form=NameForm
+        print("login before")
         return render(request,"login.html",{"msg":"FIRST you need to login before that operation","form":form})
     else:
         #if the user is already logged in and hen tries to checked out then following code will execute
@@ -114,9 +130,7 @@ def outfun(request,n):
         checkout_month=checkout.month
         checkout_day=checkout.day
         print(f"checkout time : {checkout_time} checkout month and day : {checkout_month}  {checkout_day} ")
-        my_db=get_db()
-        my_collection=get_coll_for_user_acc()
-        particular_user=my_collection.find_one({"username":n})
+
         #checkout function will only work after checkin because a user can only checkout if he/she checkedin before
         #so try exception is being used here.
         #if the user is not checked in before checking out there will be no "checkin_time" entries .

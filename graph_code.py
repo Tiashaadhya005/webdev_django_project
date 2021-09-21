@@ -24,8 +24,6 @@ class Graph:
             path = q.pop(0)
             #print(path)
             last = path[len(path) - 1]
-
-            print(last,self.graph[last])
             if (last == dst):allpath.append(path)
             for i in range(len(self.graph[last])):
                 if (self.isNotVisited(self.graph[last][i], path)):

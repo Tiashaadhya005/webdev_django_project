@@ -25,6 +25,10 @@ class Serializermodel(serializers.ModelSerializer):
         except Exception as err:
             raise serializers.ValidationError("No such Location Found")
 
-    # def create(self, validated_data):
-    #     return super(Serializermodel).save(validated_data)
-    # # -
+    def create(self, validated_data):
+        print(validated_data)
+        return Bus_booking.Bus_book_tool.create(**validated_data)
+        
+
+    # # -https://opensource.com/article/20/11/django-rest-framework-serializers
+    #https://www.django-rest-framework.org/api-guide/serializers/

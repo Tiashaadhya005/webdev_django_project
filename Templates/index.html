@@ -75,7 +75,15 @@ body {
 
 <div style="padding-left:20px">
   <div><h2>it is your online bus booking portal</h2></div>
-  <div><h3>Do you want to search buses? <a href="/busreg" >Click here to book seat</a></div>
+  <div>
+  <h3>Do you want to search buses? 
+  {%if header_mssg%}
+        <a href='/busreg/{{header_mssg}}'>start here</a>
+  {%else%}
+        <a href='/busreg/NOTDONE'>start here</a>
+  {% endif %}
+  </h3>
+  </div>
     <div><h3>register yourself before checking or checkout<a href="/check/register" >here</a></h3></div>
     <div>
       {%if header_mssg%}

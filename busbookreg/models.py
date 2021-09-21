@@ -9,6 +9,8 @@ class Bus_booking(models.Model):
     StartingLocation=CharField(max_length=30)
     EndLocation=CharField(max_length=30)
     Bus_book_tool=models.Manager()
+    
+
 
     def __str__(self):
         return self.StartingLocation+"  "+self.EndLocation

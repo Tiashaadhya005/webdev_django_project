@@ -1,7 +1,7 @@
 from pymongo import MongoClient
 
-#uri ="mongodb://mongo/"
-#client= MongoClient(uri)
+# uri ="mongodb://mongo/busbooking"
+# client= MongoClient(uri)
 client=MongoClient('localhost', 27017)
 
 
